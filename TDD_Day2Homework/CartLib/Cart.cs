@@ -17,7 +17,7 @@ namespace CartLib
 
         public double Calculate()
         {
-            return 0;
+            return this._carts.Sum(d => d.Price * d.Quantity);
         }
     }
 
