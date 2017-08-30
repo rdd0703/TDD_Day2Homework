@@ -52,7 +52,7 @@ namespace CartLib
         private int GetAvgCombinePrice(List<CartItem> carts)
         {
             var price = 0;
-            var maxCombineCount = carts.Max(d => d.Quantity);
+            var maxCombineCount = (double)carts.Max(d => d.Quantity);
 
             var lstPrice = new List<double>();
             foreach (var item in carts)
@@ -63,13 +63,14 @@ namespace CartLib
                 }
             }
 
-            var oneCombineCount = lstPrice.Count / maxCombineCount;
+            var oneCombineCount = (int)Math.Ceiling(lstPrice.Count / maxCombineCount);
             for (int i = 0; i < maxCombineCount; i++)
             {
                 var discount = GetDiscount(oneCombineCount);
-                price += (int)lstPrice.Skip(i).Take(oneCombineCount).Sum(d => d * discount);
+                price += (int)lstPrice.Skip(i * oneCombineCount).Take(oneCombineCount).Sum(d => d * discount);
 
-                oneCombineCount = lstPrice.Count - oneCombineCount;
+                if (i == maxCombineCount - 2)
+                    oneCombineCount = lstPrice.Count - ((i + 1) * oneCombineCount);
             }
 
             return price;
