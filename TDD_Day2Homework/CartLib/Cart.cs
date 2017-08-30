@@ -17,7 +17,21 @@ namespace CartLib
 
         public double Calculate()
         {
-            return this._carts.Sum(d => d.Price * d.Quantity);
+            var discount = GetDiscount(this._carts.Count);
+            return this._carts.Sum(d => d.Price * d.Quantity * discount);
+        }
+
+        private double GetDiscount(int count)
+        {
+            switch (count)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                    return 0.95;
+                default:
+                    return 1;
+            }
         }
     }
 
